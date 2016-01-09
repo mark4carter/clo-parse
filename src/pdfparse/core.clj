@@ -18,11 +18,17 @@
 	{:email (remove nil? (for [result results] (re-seq (re-pattern (str emailReg)) result)))
 		:zip (remove nil? (for [result results] (re-seq (re-pattern (str zipReg)) result)))})
 
+(defn filter-cat
+	[results]
+	{:email (filter #(re-matches (re-pattern (str emailReg)) %) results)
+		:zip (filter #(re-matches (re-pattern (str zipReg)) %) results)})
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (spit (first args)
-  	(separate-cat
+  	;(separate-cat
+		(filter-cat
 	  	(re-seq 
 	  		(re-pattern (str emailReg "|" zipReg)) 
 	  			(text-of-pdf (first (rest args)))))))
